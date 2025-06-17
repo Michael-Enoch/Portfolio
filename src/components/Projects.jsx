@@ -5,6 +5,8 @@ import shopProImg from '../assets/ShopPro.png';
 import VitaeImg from "../assets/resume.png"
 import PortfolioImg from "../assets/portfolio.png"
 import FurnitureImg from "../assets/furniture.png"
+import BreadwaveImg from "../assets/breadwave.png"
+import BlogrImg from "../assets/blogr.png"
 
 const projects = [
   {
@@ -24,29 +26,29 @@ const projects = [
   {
     title: 'Portfolio Website',
     description: 'Responsive and animated portfolio built with modern web tech.',
-    link: '#',
+    link: 'https://portfolio-weld-mu-35.vercel.app/',
     image: PortfolioImg,
     tags: ['React & TailwindCss'],
   },
    {
     title: "Hudson's Furniture",
     description: 'Responsive furniture-based e-commerce site built with modern web tech and firebase authentication integration',
-    link: '#',
+    link: 'https://hudson-furniture.vercel.app/',
     image: FurnitureImg,
     tags: ['React & TailwindCss'],
   },
   {
     title: "Breadwave clone",
     description: 'A detailed clone of the official breadwave site',
-    link: '#',
-    image: 'https://via.placeholder.com/400x250?text=Portfolio',
+    link: 'https://breadwave-clone-iota.vercel.app/',
+    image: BreadwaveImg,
     tags: ['Html & Css'],
   },
    {
     title: "Blogr landing page clone",
     description: 'A detailed landing page clone',
     link: '#',
-    image: 'https://via.placeholder.com/400x250?text=Portfolio',
+    image: BlogrImg,
      tags: ['Html & Css'],
   },
 ];
