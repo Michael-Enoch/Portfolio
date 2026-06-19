@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ME logo">
+  <rect width="64" height="64" fill="#0b0d10"/>
+  <path d="M11 43V20h6.5l6.7 11.2L30.9 20h6.4v23h-6.1V29.8l-6.9 11h-.3l-6.9-11V43H11Z" fill="#f5f2ea"/>
+  <path d="M41 20h12v5.2h-6v3.4h5.3v5H47v4.2h6.4V43H41V20Z" fill="#f5f2ea"/>
+  <rect x="52" y="38" width="5" height="5" fill="#335cff"/>
+</svg>
