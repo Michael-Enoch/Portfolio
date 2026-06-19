@@ -1,9 +1,15 @@
 @import "tailwindcss";
 
-.typing-text {
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 2px solid #4f46e5; /* Indigo caret */
-  width: 0;
-  animation: typing 5s steps(30, end), blinkCaret 0.75s step-end;
+@theme {
+  --font-sans: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --color-ink: #0b0d10;
+  --color-paper: #f5f2ea;
+  --color-paper-bright: #fbfaf6;
+  --color-brand: #335cff;
+  --color-brand-dark: #2348df;
+  --color-citron: #dfff59;
+  --color-coral: #ff6c54;
+  --color-muted: #5e625f;
+  --color-line: rgba(11, 13, 16, 0.18);
+  --color-line-dark: rgba(245, 242, 234, 0.2);
 }
