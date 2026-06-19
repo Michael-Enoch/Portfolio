@@ -1,136 +1,185 @@
-import { useState } from 'react';
-// eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion';
-import shopProImg from '../assets/ShopPro.png';
-import VitaeImg from "../assets/resume.png"
-import PortfolioImg from "../assets/portfolio.png"
-import FurnitureImg from "../assets/furniture.png"
-import BreadwaveImg from "../assets/breadwave.png"
-import BlogrImg from "../assets/blogr.png"
+import { AnimatePresence, motion } from 'framer-motion'
+import { useMemo, useState } from 'react'
+import { FiArrowUpRight, FiGithub } from 'react-icons/fi'
+import { projects } from '../data/portfolioData'
+import { LIGHT_SECTION, SHELL } from '../styles'
+import SectionIntro, { SectionRail } from './SectionIntro'
 
-const projects = [
-  {
-    title: 'E-Commerce Platform',
-    description: 'An API based shopping site built using React, TailwindCss and JavaScript',
-    link: 'https://shop-pro-gray.vercel.app/',
-    image: shopProImg,
-    tags: ['React & TailwindCss'],
-  },
-  {
-    title: 'Resume Builder',
-    description: 'An AI-powered resume builder built with React and Tailwind.',
-    link: 'https://automated-resume.vercel.app/',
-    image: VitaeImg,
-    tags: ['React & TailwindCss'],
-  },
-  {
-    title: 'Portfolio Website',
-    description: 'Responsive and animated portfolio built with modern web tech.',
-    link: 'https://portfolio-weld-mu-35.vercel.app/',
-    image: PortfolioImg,
-    tags: ['React & TailwindCss'],
-  },
-   {
-    title: "Hudson's Furniture",
-    description: 'Responsive furniture-based e-commerce site built with modern web tech and firebase authentication integration',
-    link: 'https://hudson-furniture.vercel.app/',
-    image: FurnitureImg,
-    tags: ['React & TailwindCss'],
-  },
-  {
-    title: "Breadwave clone",
-    description: 'A detailed clone of the official breadwave site',
-    link: 'https://breadwave-clone-iota.vercel.app/',
-    image: BreadwaveImg,
-    tags: ['Html & Css'],
-  },
-   {
-    title: "Blogr landing page clone",
-    description: 'A detailed landing page clone',
-    link: '#',
-    image: BlogrImg,
-     tags: ['Html & Css'],
-  },
-];
+const categories = ['All', ...new Set(projects.map((project) => project.category))]
+const featuredProjects = projects.filter((project) => project.featured)
+const AnimatedDiv = motion.div
+const AnimatedArticle = motion.article
 
-const allTags = ['All', ...new Set(projects.flatMap(p => p.tags))];
+const projectTitleClass = 'm-0 text-xl font-black leading-tight tracking-[-0.045em] sm:text-2xl'
+const mutedCopyClass = 'text-sm leading-relaxed text-muted'
 
-export default function Projects() {
-  const [selectedTag, setSelectedTag] = useState('All');
-  const filtered = selectedTag === 'All'
-    ? projects
-    : projects.filter(p => p.tags.includes(selectedTag));
+function BrowserImage({ project, eager = false }) {
+  return (
+    <div className="border border-ink bg-paper-bright transition duration-200 group-hover:-translate-y-1 group-hover:shadow-[0_1.125rem_2.1875rem_rgba(11,13,16,0.12)]">
+      <div className="flex h-5 items-center gap-1.5 bg-ink px-2.5 sm:h-6" aria-hidden="true">
+        <span className="size-1.5 rounded-full bg-coral" />
+        <span className="size-1.5 rounded-full bg-[#f4c64e]" />
+        <span className="size-1.5 rounded-full bg-[#65bf78]" />
+      </div>
+      <img
+        className="aspect-video h-auto w-full object-cover"
+        src={project.image}
+        alt={`${project.title} website interface`}
+        loading={eager ? 'eager' : 'lazy'}
+      />
+    </div>
+  )
+}
+
+function StackList({ project }) {
+  return (
+    <ul className="mt-5 flex flex-wrap gap-2 p-0" aria-label={`${project.title} technology stack`}>
+      {project.stack.map((item) => (
+        <li className="list-none border border-line px-2 py-1.5 text-[0.66rem] font-bold" key={item}>{item}</li>
+      ))}
+    </ul>
+  )
+}
+
+function ProjectLinks({ project, compact = false }) {
+  return (
+    <div className={`flex flex-wrap items-center gap-5 ${compact ? 'mt-4' : 'mt-6'}`}>
+      {project.liveUrl ? (
+        <a className="inline-flex items-center gap-2 text-xs font-extrabold text-brand-dark transition hover:text-ink" href={project.liveUrl} target="_blank" rel="noreferrer">
+          Live site <FiArrowUpRight aria-hidden="true" />
+        </a>
+      ) : (
+        <span className="text-xs font-bold text-muted" aria-label="Live site link pending">Live link coming soon</span>
+      )}
+      {project.codeUrl ? (
+        <a className="inline-flex items-center gap-2 text-xs font-extrabold text-brand-dark transition hover:text-ink" href={project.codeUrl} target="_blank" rel="noreferrer">
+          <FiGithub aria-hidden="true" /> Code
+        </a>
+      ) : null}
+    </div>
+  )
+}
+
+export function FeaturedProjects() {
+  const [leadProject, ...secondaryProjects] = featuredProjects
 
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-10 bg-slate-800 text-slate-100">
-      <div className="max-w-6xl mx-auto">
-        <motion.h2
-          className="text-3xl sm:text-4xl font-semibold mb-8 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          Projects
-        </motion.h2>
-
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {allTags.map(tag => (
-            <button
-              key={tag}
-              onClick={() => setSelectedTag(tag)}
-              className={`px-4 py-1 rounded-full text-sm font-medium border transition ${
-                selectedTag === tag
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'border-slate-600 text-slate-300 hover:border-indigo-500 hover:text-white'
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
+    <section className={LIGHT_SECTION} id="work">
+      <SectionRail />
+      <div className={SHELL}>
+        <div className="mb-10 flex flex-col items-start justify-between gap-8 sm:mb-16 lg:flex-row lg:items-end">
+          <SectionIntro
+            number="01"
+            title="Selected work"
+            description="A closer look at digital products built around clear problems, useful interactions, and polished execution."
+          />
+          <a className="ml-5 inline-flex items-center gap-2 border-b border-current pb-1 text-xs font-extrabold text-brand-dark transition hover:text-ink sm:ml-8 lg:ml-0" href="#more-projects">
+            View all projects <FiArrowUpRight aria-hidden="true" />
+          </a>
         </div>
 
-        {/* Carousel Scroll on Mobile */}
-        <div className="grid sm:grid-cols-2 text-slate-100 lg:grid-cols-3 gap-6 sm:gap-8 overflow-x-auto sm:overflow-visible sm:grid">
-          {filtered.map((project, index) => (
-            <motion.div
-              key={index}
-              className="min-w-[85%] sm:min-w-0 sm:w-auto bg-slate-900 p-4 rounded-xl shadow-md hover:shadow-xl transition hover:scale-[1.02] flex-shrink-0"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-48 object-cover rounded-md mb-4"
-              />
-              <h3 className="text-lg font-bold mb-1 text-indigo-400">{project.title}</h3>
-              <p className="text-slate-300 text-sm mb-3">{project.description}</p>
-              <div className="flex flex-wrap gap-1 mb-2">
-                {project.tags.map((tag, i) => (
-                  <span
-                    key={i}
-                    className="text-xs px-2 py-0.5 bg-slate-700 rounded-full text-slate-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
+        <div className="grid grid-cols-1 gap-10 pl-5 sm:pl-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(18.75rem,.8fr)] lg:gap-8 xl:gap-14">
+          <article className="group min-w-0">
+            <BrowserImage project={leadProject} />
+            <div className="grid grid-cols-[2.125rem_minmax(0,1fr)] gap-2.5 pt-7 sm:grid-cols-[3.125rem_minmax(0,1fr)] sm:gap-4">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-brand">01</span>
+              <div>
+                <p className="mb-2 text-xs font-extrabold uppercase tracking-wider text-brand">{leadProject.category}</p>
+                <h3 className={projectTitleClass}>{leadProject.title}</h3>
+                <p className={`mt-3 max-w-[38rem] ${mutedCopyClass}`}>{leadProject.description}</p>
+                <div className="mt-6 grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-2 sm:gap-6">
+                  <p className="m-0 text-xs leading-relaxed text-muted">
+                    <strong className="mb-1.5 block text-[0.67rem] font-extrabold uppercase tracking-wider text-ink">The problem</strong>
+                    {leadProject.problem}
+                  </p>
+                  <p className="m-0 text-xs leading-relaxed text-muted">
+                    <strong className="mb-1.5 block text-[0.67rem] font-extrabold uppercase tracking-wider text-ink">The value</strong>
+                    {leadProject.value}
+                  </p>
+                </div>
+                <StackList project={leadProject} />
+                <ProjectLinks project={leadProject} />
               </div>
-              <a
-                href={project.link}
-                className="text-indigo-300 hover:text-indigo-400 transition text-sm"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View Project
-              </a>
-            </motion.div>
-          ))}
+            </div>
+          </article>
+
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-1">
+            {secondaryProjects.map((project, index) => (
+              <article className="group grid min-w-0 grid-cols-1 items-start gap-5 border-b border-line pb-9 xl:grid-cols-[minmax(0,1.2fr)_minmax(9.375rem,.8fr)]" key={project.id}>
+                <BrowserImage project={project} />
+                <div>
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-brand">0{index + 2}</span>
+                  <p className="mb-2 mt-1 text-xs font-extrabold uppercase tracking-wider text-brand">{project.category}</p>
+                  <h3 className="m-0 text-xl font-black leading-tight tracking-[-0.045em]">{project.title}</h3>
+                  <p className={`mt-2.5 ${mutedCopyClass}`}>{project.description}</p>
+                  <ProjectLinks project={project} compact />
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  );
+  )
+}
+
+export function ProjectExplorer() {
+  const [activeCategory, setActiveCategory] = useState('All')
+  const filteredProjects = useMemo(
+    () => activeCategory === 'All' ? projects : projects.filter((project) => project.category === activeCategory),
+    [activeCategory],
+  )
+
+  return (
+    <section className={`${LIGHT_SECTION} bg-paper-bright`} id="more-projects">
+      <SectionRail />
+      <div className={SHELL}>
+        <div className="mb-10 flex flex-col items-start justify-between gap-8 sm:mb-16 lg:flex-row lg:items-end">
+          <SectionIntro
+            number="04"
+            title="More projects"
+            description="Explore the rest of the work by project type. All project content is managed from one data file."
+          />
+          <div className="flex flex-wrap justify-start gap-2 pl-5 sm:pl-8 lg:justify-end lg:pl-0" role="group" aria-label="Filter projects by category">
+            {categories.map((category) => (
+              <button
+                type="button"
+                key={category}
+                aria-pressed={activeCategory === category}
+                className={`min-h-10 border px-3 text-[0.7rem] font-bold transition ${activeCategory === category ? 'border-brand bg-brand text-white' : 'border-line bg-transparent text-ink hover:border-brand hover:bg-brand hover:text-white'}`}
+                onClick={() => setActiveCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <AnimatedDiv className="grid grid-cols-1 gap-7 pl-5 sm:grid-cols-2 sm:pl-8 lg:grid-cols-3" layout>
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <AnimatedArticle
+                layout
+                className="group flex min-w-0 flex-col border-b border-ink"
+                key={project.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.28 }}
+              >
+                <BrowserImage project={project} />
+                <div className="flex flex-1 flex-col px-0.5 pb-6 pt-5">
+                  <p className="mb-2 text-xs font-extrabold uppercase tracking-wider text-brand">{project.category}</p>
+                  <h3 className="m-0 text-xl font-black leading-tight tracking-[-0.045em]">{project.title}</h3>
+                  <p className={`mt-2.5 ${mutedCopyClass}`}>{project.description}</p>
+                  <StackList project={project} />
+                  <div className="mt-auto pt-1"><ProjectLinks project={project} compact /></div>
+                </div>
+              </AnimatedArticle>
+            ))}
+          </AnimatePresence>
+        </AnimatedDiv>
+      </div>
+    </section>
+  )
 }
